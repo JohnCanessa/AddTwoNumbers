@@ -7,7 +7,7 @@ Solve the problem.
 Then, if interested in my approach, please take a look at the following
 post in my blog:
 
-<T.B.D.>
+https://www.johncanessa.com/2020/12/17/add-two-numbers-in-java/
 
 Keep in mind that one of the best ways to lear is to read and experiemnt.
 
