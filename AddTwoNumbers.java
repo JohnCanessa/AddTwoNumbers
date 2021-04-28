@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 
+
 /**
  * Definition for singly-linked list.
  */
@@ -21,13 +22,15 @@ class ListNode {
     }
 
     public ListNode(int val, ListNode next) {
-        this.val = val;
-        this.next = next;
+        this.val    = val;
+        this.next   = next;
     }
 }
 
+
 /**
- * LeetCode 2. Add Two Numbers https://leetcode.com/problems/add-two-numbers/
+ * LeetCode 2. Add Two Numbers 
+ * https://leetcode.com/problems/add-two-numbers/
  */
 public class AddTwoNumbers {
 
@@ -56,7 +59,6 @@ public class AddTwoNumbers {
     }
 
 
-    
     /**
      * Display linked list.
      * 
@@ -77,32 +79,32 @@ public class AddTwoNumbers {
     }
 
 
-
-
-
     /**
      * Add the two numbers and return the sum as a linked list.
+     * 
+     * Runtime: 2 ms, faster than 79.87% of Java online submissions.
+     * Memory Usage: 39.8 MB, less than 9.03% of Java online submissions.
      */
-    static ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+    static ListNode addTwoNumbers0(ListNode l1, ListNode l2) {
 
         // **** initialization ****
-        ListNode ll3    = null;
+        ListNode l3     = null;
         ListNode p      = l1;
         ListNode q      = l2;
         int carry       = 0;
         ListNode tail   = null;
 
-        // **** traverse the linked lists computing the sum digit by digit ****
+        // **** traverse the linked lists computing the sum digit by digit O(n) ****
         while (p != null || q != null) {
 
-            // **** sum the carry and digits for the current position ****
+            // **** sum carry and digits for current position ****
             int s = carry;
             if (p != null)
                 s += p.val;
             if (q != null)
                 s += q.val;
 
-            // **** update the carry ****
+            // **** update carry ****
             if (s >= 10)
                 carry = 1;
             else
@@ -111,10 +113,10 @@ public class AddTwoNumbers {
             // **** update s ****
             s %= 10;
 
-            // **** save digit in new node and append to sum list ****
-            if (ll3 == null) {
-                ll3     = new ListNode(s);
-                tail    = ll3;
+            // **** save digit in new node and append to result list ****
+            if (l3 == null) {
+                l3      = new ListNode(s);
+                tail    = l3;
             } else {
                 ListNode d  = new ListNode(s);
                 tail.next   = d;
@@ -136,7 +138,111 @@ public class AddTwoNumbers {
         }
 
         // **** return sum ****
-        return ll3;
+        return l3;
+    }
+
+
+    /**
+     * Add the two numbers and return the sum as a linked list.
+     * 
+     * Runtime: 2 ms, faster than 76.89% of Java online submissions.
+     * Memory Usage: 38.8 MB, less than 95.20% of Java online submissions.
+     */
+    static ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+
+        // **** initialization ****
+        ListNode l3 = null;
+        ListNode p  = l1;
+        int carry   = 0;
+
+        // **** traverse the linked lists computing the sum digit by digit O(n) ****
+        while (l1 != null || l2 != null) {
+
+            // **** add two digits (if needed) ****
+            if (l1 != null && l2 != null) {
+
+                // **** add two digits and carry ****
+                int sum = l1.val + l2.val + carry;
+
+                // **** update sum and carry ****
+                if (sum > 9) {
+                    carry = sum / 10;
+                    sum %= 10;
+                } else {
+                    carry = 0;
+                }
+
+                // **** insert new node into l3 ****
+                if (l3 == null) {
+                    p = new ListNode(sum, null);
+                    l3 = p;
+                } else {
+                    p.next = new ListNode(sum, null);
+                    p = p.next;
+                }
+
+                // **** move both pointers forward ****
+                l1 = l1.next;
+                l2 = l2.next;
+
+            } else if (l1 != null) {
+
+                // **** add digit and carry ****
+                int sum = l1.val + carry;
+
+                // **** update sum and carry ****
+                if (sum > 9) {
+                    carry = sum / 10;
+                    sum %= 10;
+                } else {
+                    carry = 0;
+                }
+
+                // **** insert new node into l3 ****
+                if (l3 == null) {
+                    p = new ListNode(sum, null);
+                    l3 = p;
+                } else {
+                    p.next = new ListNode(sum, null);
+                    p = p.next;
+                }
+
+                // **** move l1 forward ****
+                l1 = l1.next;
+
+            } else if (l2 != null) {
+
+                // **** add digit and carry ****
+                int sum = l2.val + carry;
+
+                // **** update sum and carry ****
+                if (sum > 9) {
+                    carry = sum / 10;
+                    sum %= 10;
+                } else {
+                    carry = 0;
+                }
+
+                // **** insert new node into l3 ****
+                if (l3 == null) {
+                    p = new ListNode(sum, null);
+                    l3 = p;
+                } else {
+                    p.next = new ListNode(sum, null);
+                    p = p.next;
+                }
+
+                // **** move l2 forward ****
+                l2 = l2.next;
+            }
+        }
+
+        // **** insert new carry node into l3 ****
+        if (carry > 0)
+            p.next = new ListNode(carry, null);
+
+        // **** return sum ****
+        return l3;
     }
 
 
@@ -170,32 +276,35 @@ public class AddTwoNumbers {
         System.out.println("main <<< arr2: " + Arrays.toString(arr2));
 
         // **** generate first linked list ****
-        ListNode ll1 = populate(arr1);
+        ListNode l1 = populate(arr1);
 
         // **** generate second linked list ****
-        ListNode ll2 = populate(arr2);
+        ListNode l2 = populate(arr2);
 
         // ???? display first linked list ????
-        System.out.print("main <<< ll1: ");
-        display(ll1);
+        System.out.print("main <<< l1: ");
+        display(l1);
         System.out.println();
 
         // ???? display second linked list ????
-        System.out.print("main <<< ll2: ");
-        display(ll2);
+        System.out.print("main <<< l2: ");
+        display(l2);
         System.out.println();
-
-
-
-
 
         // **** add the two numbers and return the result as a linked list ****
-        ListNode ll3 = addTwoNumbers(ll1, ll2);
+        ListNode l3 = addTwoNumbers0(l1, l2);
 
-        // ???? display the linked list with the result ????
-        System.out.print("main <<< ll3: ");
-        display(ll3);
+        // ???? display the linked list with result ????
+        System.out.print("main <<< l3: ");
+        display(l3);
         System.out.println();
 
+        // **** add the two numbers and return the result as a linked list ****
+        l3 = addTwoNumbers(l1, l2);
+
+        // ???? display the linked list with result ????
+        System.out.print("main <<< l3: ");
+        display(l3);
+        System.out.println();
     }
 }
